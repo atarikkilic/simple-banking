@@ -16,7 +16,7 @@ public class Account {
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
     private Date createDate;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Transaction> transactions;
 
     public Account(String owner, String accountNumber) {
@@ -61,6 +61,7 @@ public class Account {
     }
 
     public void post(Transaction transaction) throws InsufficientBalanceException {
+        transaction.setAccount(this);
         transaction.execute(this);
         transactions.add(transaction);
     }

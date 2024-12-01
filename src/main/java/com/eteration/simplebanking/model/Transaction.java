@@ -29,9 +29,22 @@ public abstract class Transaction {
         this.date = new Date();
         this.amount = amount;
         this.approvalCode = UUID.randomUUID().toString();
+        System.out.println("Transaction created with amount: " + amount + " and approvalCode: " + approvalCode);
     }
 
-    protected Transaction() {}
+    protected Transaction() {
+        this.date = new Date();
+    }
+
+    protected void setAmount(Double amount) {
+        this.amount = amount;
+        if (this.approvalCode == null) {
+            this.approvalCode = UUID.randomUUID().toString();
+            if (this.date == null) {
+                this.date = new Date();
+            }
+        }
+    }
 
     public Date getDate() {
         return date;
@@ -49,5 +62,12 @@ public abstract class Transaction {
         return this.getClass().getSimpleName();
     }
 
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
     public abstract void execute(Account account) throws InsufficientBalanceException;
 }
