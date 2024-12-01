@@ -24,11 +24,8 @@ public class AccountController {
                                                     @RequestBody DepositTransaction deposit) {
         Account account = accountService.findAccount(accountNumber);
         try {
-            System.out.println("Before post - approvalCode: " + deposit.getApprovalCode());
             account.post(deposit);
-            System.out.println("After post - approvalCode: " + deposit.getApprovalCode());
             accountService.save(account);
-            System.out.println("After save - approvalCode: " + deposit.getApprovalCode());
             return ResponseEntity.ok(new TransactionStatus("OK", deposit.getApprovalCode()));
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();

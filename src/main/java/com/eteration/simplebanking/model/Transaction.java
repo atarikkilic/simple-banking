@@ -29,7 +29,6 @@ public abstract class Transaction {
         this.date = new Date();
         this.amount = amount;
         this.approvalCode = UUID.randomUUID().toString();
-        System.out.println("Transaction created with amount: " + amount + " and approvalCode: " + approvalCode);
     }
 
     protected Transaction() {
