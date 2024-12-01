@@ -1,17 +1,48 @@
 package com.eteration.simplebanking.controller;
 
-// This class is a place holder you can change the complete implementation
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import com.eteration.simplebanking.model.Account;
+import com.eteration.simplebanking.model.DepositTransaction;
+import com.eteration.simplebanking.model.InsufficientBalanceException;
+import com.eteration.simplebanking.model.WithdrawalTransaction;
+import com.eteration.simplebanking.services.AccountService;
+
+@RestController
+@RequestMapping("/account/v1")
 public class AccountController {
 
+    @Autowired
+    private AccountService accountService;
 
-    public Object getAccount() {
-        return null;
+    @GetMapping("/{accountNumber}")
+    public ResponseEntity<Account> getAccount(@PathVariable String accountNumber) {
+        Account account = accountService.findAccount(accountNumber);
+        return ResponseEntity.ok(account);
     }
 
-    public Object credit( ) {
-        return null;
+    @PostMapping("/{accountNumber}/credit")
+    public ResponseEntity<TransactionStatus> credit(@PathVariable String accountNumber,
+                                                    @RequestBody DepositTransaction deposit) {
+        Account account = accountService.findAccount(accountNumber);
+        try {
+            account.post(deposit);
+            accountService.save(account);
+            return ResponseEntity.ok(new TransactionStatus("OK"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
-    public Object debit() {
-        return null;
-	}
+
+    @PostMapping("/{accountNumber}/debit")
+    public ResponseEntity<TransactionStatus> debit(@PathVariable String accountNumber,
+                                                   @RequestBody WithdrawalTransaction withdrawal)
+            throws InsufficientBalanceException {
+        Account account = accountService.findAccount(accountNumber);
+        account.post(withdrawal);
+        accountService.save(account);
+        return ResponseEntity.ok(new TransactionStatus("OK"));
+    }
 }
