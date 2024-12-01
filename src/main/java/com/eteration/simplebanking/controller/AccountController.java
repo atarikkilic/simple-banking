@@ -3,11 +3,7 @@ package com.eteration.simplebanking.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import com.eteration.simplebanking.model.Account;
-import com.eteration.simplebanking.model.DepositTransaction;
-import com.eteration.simplebanking.model.InsufficientBalanceException;
-import com.eteration.simplebanking.model.WithdrawalTransaction;
+import com.eteration.simplebanking.model.*;
 import com.eteration.simplebanking.services.AccountService;
 
 @RestController
@@ -30,7 +26,8 @@ public class AccountController {
         try {
             account.post(deposit);
             accountService.save(account);
-            return ResponseEntity.ok(new TransactionStatus("OK", deposit.getApprovalCode()));
+            TransactionStatus status = new TransactionStatus("OK", deposit.getApprovalCode());
+            return ResponseEntity.ok(status);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
@@ -43,6 +40,7 @@ public class AccountController {
         Account account = accountService.findAccount(accountNumber);
         account.post(withdrawal);
         accountService.save(account);
-        return ResponseEntity.ok(new TransactionStatus("OK", withdrawal.getApprovalCode()));
+        TransactionStatus status = new TransactionStatus("OK", withdrawal.getApprovalCode());
+        return ResponseEntity.ok(status);
     }
 }

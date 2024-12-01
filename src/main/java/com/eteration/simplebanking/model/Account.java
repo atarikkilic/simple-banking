@@ -1,17 +1,19 @@
 package com.eteration.simplebanking.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.*;
 
 @Entity
 public class Account {
     @Id
     private String accountNumber;
-
     private String owner;
     private Double balance;
+
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
     private Date createDate;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
@@ -39,12 +41,12 @@ public class Account {
         return balance;
     }
 
-    public Date getCreateDate() {
-        return createDate;
-    }
-
     public List<Transaction> getTransactions() {
         return transactions;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
     }
 
     public void deposit(Double amount) {
