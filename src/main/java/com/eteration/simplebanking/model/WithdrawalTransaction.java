@@ -1,8 +1,13 @@
 package com.eteration.simplebanking.model;
 
+public class WithdrawalTransaction extends Transaction {
 
-// This class is a place holder you can change the complete implementation
-public class WithdrawalTransaction {
+    public WithdrawalTransaction(Double amount) {
+        super(amount);
+    }
+
+    @Override
+    public void execute(Account account) throws InsufficientBalanceException {
+        account.withdraw(this.getAmount());
+    }
 }
-
-

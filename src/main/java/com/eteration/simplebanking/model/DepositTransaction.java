@@ -1,6 +1,13 @@
 package com.eteration.simplebanking.model;
 
+public class DepositTransaction extends Transaction {
 
-// This class is a place holder you can change the complete implementation
-public class DepositTransaction  {
+    public DepositTransaction(Double amount) {
+        super(amount);
+    }
+
+    @Override
+    public void execute(Account account) {
+        account.deposit(this.getAmount());
+    }
 }
