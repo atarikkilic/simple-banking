@@ -26,6 +26,8 @@ public abstract class Transaction {
         this.approvalCode = UUID.randomUUID().toString();
     }
 
+    protected Transaction() {}
+
     public Date getDate() {
         return date;
     }

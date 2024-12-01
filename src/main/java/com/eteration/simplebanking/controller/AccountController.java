@@ -30,7 +30,7 @@ public class AccountController {
         try {
             account.post(deposit);
             accountService.save(account);
-            return ResponseEntity.ok(new TransactionStatus("OK"));
+            return ResponseEntity.ok(new TransactionStatus("OK", deposit.getApprovalCode()));
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
@@ -43,6 +43,6 @@ public class AccountController {
         Account account = accountService.findAccount(accountNumber);
         account.post(withdrawal);
         accountService.save(account);
-        return ResponseEntity.ok(new TransactionStatus("OK"));
+        return ResponseEntity.ok(new TransactionStatus("OK", withdrawal.getApprovalCode()));
     }
 }
