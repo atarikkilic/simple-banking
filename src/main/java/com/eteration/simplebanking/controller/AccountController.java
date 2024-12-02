@@ -42,4 +42,15 @@ public class AccountController {
         TransactionStatus status = new TransactionStatus("OK", withdrawal.getApprovalCode());
         return ResponseEntity.ok(status);
     }
+
+    @PostMapping("/{accountNumber}/bill-payment")
+    public ResponseEntity<TransactionStatus> billPayment(
+            @PathVariable String accountNumber,
+            @RequestBody BillPaymentTransaction billPayment)
+            throws InsufficientBalanceException {
+        Account account = accountService.findAccount(accountNumber);
+        account.post(billPayment);
+        accountService.save(account);
+        return ResponseEntity.ok(new TransactionStatus("OK", billPayment.getApprovalCode()));
+    }
 }
